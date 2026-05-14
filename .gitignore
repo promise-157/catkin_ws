@@ -1,0 +1,38 @@
+# ROS catkin workspace specific
+build/
+devel/
+install/
+logs/
+.catkin_workspace
+
+# VSCode
+.vscode/
+
+# Build artifacts
+*.o
+*.os
+*.so
+*.a
+*.lib
+*.bin
+*.out
+*.log
+compile_commands.json
+CMakeCache.txt
+CMakeFiles/
+Makefile
+cmake_install.cmake
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
