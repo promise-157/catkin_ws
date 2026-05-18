@@ -19,5 +19,49 @@ int main(int argc, char **argv) {
       nh.serviceClient<mavros_msgs::CommandBool>("mavros/cmd/arming");
   ros::ServiceClient set_mode_client =
       nh.serviceClient<mavros_msgs::SetMode>("mavros/set_mode");
+  ros::Rate rate(20.0);
+  geometry_msgs::PoseStamped pos;
+  pos.pose.position.x = 0;
+  pos.pose.position.y = 0;
+  pos.pose.position.z = 2;
+  mavros_msgs::SetMode off_set_mode;
+  off_set_mode.request.custom_mode = "OFFBOARD";
+  mavros_msgs::CommandBool arm_cmd;
+  arm_cmd.request.value = true;
+  while (ros::ok() && !current_state.connected) {
+    ros::spinOnce();
+    rate.sleep();
+  }
+  //在进入OFFBOARD（机载/地面站控制）模式之前，必须已经接收到了控制期望值（Setpoint）
+  for (int i = 100; ros::ok() && i > 0; i--) {
+    local_pos_pub.publish(pos);
+    ros::spinOnce();
+    rate.sleep();
+  }
+
+  ros::Time last_request = ros::Time::now();
+  while (ros::ok()) {
+    if (current_state.mode != "OFFBOARD" &&
+        ((ros::Time::now() - last_request) > ros::Duration(5.0))) {
+      if (set_mode_client.call(off_set_mode) &&
+          off_set_mode.response.mode_sent) {
+        ROS_INFO("Offboard enabled");
+      }
+      last_request = ros::Time::now();
+    } else {
+      if (!current_state.armed &&
+          ((ros::Time::now() - last_request) > ros::Duration(5.0))) {
+        if (arming_client.call(arm_cmd) && arm_cmd.response.success) {
+          ROS_INFO("Vehicle armed");
+        }
+        last_request = ros::Time::now();
+      }
+    }
+
+    local_pos_pub.publish(pos);
+    ros::spinOnce();
+    rate.sleep();
+  }
+
   return 0;
 }

@@ -174,3 +174,66 @@ netstat -ano | findstr :端口号
 2. Bridge:像正常的局域网通信。且处于同一网段。
 3. mirrored当成一个电脑用。
 4. 前两种需要考虑防火墙，请注意检查。
+## 主机地址
+通常情况下export PX4_SIM_HOSTNAME=127.0.0.1就好但是如果解析脚本出问题就不行了，可以试试
+export PX4_SIM_HOST_ADDR=127.0.0.1
+如果px4发完Windows的airsim的话就改成cat /etc/resolv.conf获取的地址。
+## 脚本执行解析失败ip
+sudo ln -sf /bin/bash /bin/sh。考虑使用这个解决。
+## mavros端口
+配置的前面为mavros功能包的应用程序占用的本地端口因此没有指定ip。@后面为允许接收的端口，他只会接收这个参数的端口的消息其他端口不接受。在仿真中px4的ip为localhost。qgc采用广播方式同一网段内的也行。这里用了192，这是我win的ip，所以记得开启端口转发。
+1. 配置mavros与px4通信
+	<arg name="fcu_url" default="udp://:14540@localhost:14557"/>
+2. 配置mavros与qgc通信。
+  <arg name="gcs_url" default="udp://:14556@192.168.1.10:14550" />
+# 自动生成调参
+系统就会弹出一个漂亮的图形化调参界面。你在界面上拖动 Kp0 的滑块，无人机节点里的 config.Kp0 就会在不重启程序的情况下实时改变。他会在devel/下面生成头文件。
+## cfg/fake_rc.cfg
+这是一个特殊的 Python 脚本，你需要手写它来告诉 ROS 你需要哪些调参滑块。
+## CMakeLists.txt
+1. 确保 find_package 里有 dynamic_reconfigure
+find_package(catkin REQUIRED COMPONENTS dynamic_reconfigure roscpp ...)
+
+2. 挂载你的 cfg 文件
+generate_dynamic_reconfigure_options(
+  cfg/fake_rc.cfg
+)
+## 使用
+
+```
+#include <dynamic_reconfigure/server.h> // 引入动态参数服务器
+#include "px4ctrl/fake_rcConfig.h"       // 引入自动生成的头文件
+// 实例化一个调参服务器，并绑定回调函数
+    dynamic_reconfigure::Server<px4ctrl::fake_rcConfig> server;
+    dynamic_reconfigure::Server<px4ctrl::fake_rcConfig>::CallbackType f;
+
+    f = boost::bind(&callback, _1, _2);
+    server.setCallback(f);
+```
+## 示例cfg文件
+```
+#!/usr/bin/env python
+PACKAGE = "px4ctrl"
+ 
+from dynamic_reconfigure.parameter_generator_catkin import *
+ 
+gen = ParameterGenerator()
+ 
+gen.add( "cmd_int",     int_t,     0,     "An Integer parameter", 0,      0,       1)
+gen.add( "mode_int",    int_t,     0,     "An Integer parameter", 0,      0,       1)
+gen.add( "cmd_bool",    bool_t,    0,     "A Boolean parameter",  False)
+gen.add( "mode_bool",   bool_t,    0,     "A Boolean parameter",  False)
+ 
+size_enum = gen.enum([ gen.const("Small",      int_t, 0, "A small constant"),
+                       gen.const("Medium",     int_t, 1, "A medium constant"),
+                       gen.const("Large",      int_t, 2, "A large constant"),
+                       gen.const("ExtraLarge", int_t, 3, "An extra large constant")],
+                       "An enum to set size")
+ 
+gen.add("size", int_t, 0, "A size parameter which is edited via an enum", 1, 0, 3, edit_method=size_enum)
+ 
+exit(gen.generate(PACKAGE, "px4ctrl", "fake_rc")) 
+
+```
+## 启动
+rosrun rqt_reconfigure rqt_reconfigure
