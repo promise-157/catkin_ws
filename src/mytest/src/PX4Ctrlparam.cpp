@@ -87,7 +87,11 @@ void mytest_px4ctrlparam::Parameter_t::config_from_ros_handle(
 
   max_angle /= (180.0 / M_PI);
 
-  if (takeoff_land.enable_auto_arm && takeoff_land.enable) {
+  ROS_INFO("[DebugParam] read enable: %s",
+           takeoff_land.enable ? "true" : "false");
+  ROS_INFO("[DebugParam] read enable_auto_arm: %s",
+           takeoff_land.enable_auto_arm ? "true" : "false");
+  if (takeoff_land.enable_auto_arm && !takeoff_land.enable) {
     takeoff_land.enable_auto_arm = false;
     ROS_ERROR("\"enable_auto_arm\" is only allowd with \"auto_takeoff_land\" "
               "enabled.");

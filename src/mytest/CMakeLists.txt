@@ -149,6 +149,7 @@ add_executable(${PROJECT_NAME}_node
  src/PX4Ctrlparam.cpp
  src/controller.cpp
  src/ROScallback.cpp
+ src/PX4Ctrlfsm.cpp
  )
 
 
