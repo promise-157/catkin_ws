@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.0.2)
-project(mytest)
+project(myplan_manage)
 
 ## Compile as C++11, supported in ROS Kinetic and newer
 # add_compile_options(-std=c++11)
@@ -8,15 +8,11 @@ project(mytest)
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
 ## is used, also find other catkin packages
 find_package(catkin REQUIRED COMPONENTS
+  geometry_msgs
   roscpp
   rospy
-  geometry_msgs
-  mavros_msgs
   std_msgs
-  dynamic_reconfigure
-  uav_utils
 )
-find_package(Eigen3 REQUIRED) 
 
 ## System dependencies are found with CMake's conventions
 # find_package(Boost REQUIRED COMPONENTS system)
@@ -75,7 +71,7 @@ find_package(Eigen3 REQUIRED)
 ## Generate added messages and services with any dependencies listed here
 # generate_messages(
 #   DEPENDENCIES
-#   std_msgs
+#   geometry_msgs#   std_msgs
 # )
 
 ################################################
@@ -93,9 +89,10 @@ find_package(Eigen3 REQUIRED)
 ##     and list every .cfg file to be processed
 
 ## Generate dynamic reconfigure parameters in the 'cfg' folder
-generate_dynamic_reconfigure_options(
-  cfg/fake_rc.cfg
-)
+# generate_dynamic_reconfigure_options(
+#   cfg/DynReconf1.cfg
+#   cfg/DynReconf2.cfg
+# )
 
 ###################################
 ## catkin specific configuration ##
@@ -108,8 +105,8 @@ generate_dynamic_reconfigure_options(
 ## DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
 #  INCLUDE_DIRS include
-#  LIBRARIES mytest
-#  CATKIN_DEPENDS roscpp std_msgs
+#  LIBRARIES myplan_manage
+#  CATKIN_DEPENDS geometry_msgs roscpp rospy std_msgs
 #  DEPENDS system_lib
 )
 
@@ -120,17 +117,13 @@ catkin_package(
 ## Specify additional locations of header files
 ## Your package locations should be listed before other locations
 include_directories(
+# include
   ${catkin_INCLUDE_DIRS}
-  ${EIGEN3_INCLUDE_DIRS}
-  include
 )
-set(LIBS
-${catkin_LIBRARIES}
-${EIGEN3_LIBS}
-)
+
 ## Declare a C++ library
 # add_library(${PROJECT_NAME}
-#   src/${PROJECT_NAME}/mytest.cpp
+#   src/${PROJECT_NAME}/myplan_manage.cpp
 # )
 
 ## Add cmake target dependencies of the library
@@ -141,17 +134,7 @@ ${EIGEN3_LIBS}
 ## Declare a C++ executable
 ## With catkin_make all packages are built within a single CMake context
 ## The recommended prefix ensures that target names across packages don't collide
-add_executable(${PROJECT_NAME}_node
- src/mytest_node.cpp
- )
- add_executable(myctrl_node
- src/myctrl_node.cpp
- src/PX4Ctrlparam.cpp
- src/controller.cpp
- src/ROScallback.cpp
- src/PX4Ctrlfsm.cpp
- )
-
+# add_executable(${PROJECT_NAME}_node src/myplan_manage_node.cpp)
 
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
@@ -164,12 +147,9 @@ add_executable(${PROJECT_NAME}_node
 # add_dependencies(${PROJECT_NAME}_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 
 ## Specify libraries to link a library or executable target against
-target_link_libraries(${PROJECT_NAME}_node
-  ${LIBS}
-)
-target_link_libraries(myctrl_node
-  ${LIBS}
-)
+# target_link_libraries(${PROJECT_NAME}_node
+#   ${catkin_LIBRARIES}
+# )
 
 #############
 ## Install ##
@@ -218,7 +198,7 @@ target_link_libraries(myctrl_node
 #############
 
 ## Add gtest based cpp test target and link libraries
-# catkin_add_gtest(${PROJECT_NAME}-test test/test_mytest.cpp)
+# catkin_add_gtest(${PROJECT_NAME}-test test/test_myplan_manage.cpp)
 # if(TARGET ${PROJECT_NAME}-test)
 #   target_link_libraries(${PROJECT_NAME}-test ${PROJECT_NAME})
 # endif()
