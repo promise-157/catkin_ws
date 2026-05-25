@@ -16,3 +16,12 @@
 ## package.xml
 就像他的后缀，他只是起到标记管理作用，因为功能包可能会有很多，所以需要这个。有了这个可以执行rosdep一键完成依赖。这是个生态位工具，很多ros相关的指令都要查询这个。
 同时他又不可缺少，因为他指定了依赖关系，这也让他同时拥有多个main函数，package能确定这么多编译目标的依赖先后关系。
+## 将功能包生成lib给其他包find_package
+# catkin_package(CATKIN_DEPENDS message_runtime)
+catkin_package(
+ INCLUDE_DIRS include
+ LIBRARIES ego_planner
+ CATKIN_DEPENDS plan_env path_searching bspline_opt traj_utils 
+#  DEPENDS system_lib
+)
+把上面的注释解除时就能把LIBRARIES ego_planner这个指定的依赖包名字即本包的include暴露给find_package.第三行是依赖，如果想要使用暴露的include，不仅要LIBRARIES ego_planner包含，依赖也要有。

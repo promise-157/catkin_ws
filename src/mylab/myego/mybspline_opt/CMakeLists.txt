@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.0.2)
-project(myplan_manage)
+project(mybspline_opt)
 
 ## Compile as C++11, supported in ROS Kinetic and newer
 # add_compile_options(-std=c++11)
@@ -8,14 +8,11 @@ project(myplan_manage)
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
 ## is used, also find other catkin packages
 find_package(catkin REQUIRED COMPONENTS
-  geometry_msgs
   roscpp
   rospy
   std_msgs
-  mytraj_utils
-  mybspline_opt
 )
-find_package(Eigen3 REQUIRED) 
+find_package(Eigen3 REQUIRED)
 
 ## System dependencies are found with CMake's conventions
 # find_package(Boost REQUIRED COMPONENTS system)
@@ -74,7 +71,7 @@ find_package(Eigen3 REQUIRED)
 ## Generate added messages and services with any dependencies listed here
 # generate_messages(
 #   DEPENDENCIES
-#   geometry_msgs#   std_msgs
+#   std_msgs
 # )
 
 ################################################
@@ -107,10 +104,10 @@ find_package(Eigen3 REQUIRED)
 ## CATKIN_DEPENDS: catkin_packages dependent projects also need
 ## DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
-#  INCLUDE_DIRS include
-#  LIBRARIES myplan_manage
-#  CATKIN_DEPENDS geometry_msgs roscpp rospy std_msgs
-#  DEPENDS system_lib
+ INCLUDE_DIRS include
+ LIBRARIES mybspline_opt
+ CATKIN_DEPENDS roscpp rospy std_msgs
+ DEPENDS system_lib
 )
 
 ###########
@@ -124,14 +121,11 @@ include_directories(
   ${catkin_INCLUDE_DIRS}
   ${EIGEN3_INCLUDE_DIRS}
 )
-set(LIBS
-${catkin_LIBRARIES}
-${EIGEN3_LIBS}
-)
+
 ## Declare a C++ library
-# add_library(${PROJECT_NAME}
-#   src/${PROJECT_NAME}/myplan_manage.cpp
-# )
+add_library(mybspline_opt
+  src/uniform_bspline.cpp
+)
 
 ## Add cmake target dependencies of the library
 ## as an example, code may need to be generated before libraries
@@ -141,8 +135,7 @@ ${EIGEN3_LIBS}
 ## Declare a C++ executable
 ## With catkin_make all packages are built within a single CMake context
 ## The recommended prefix ensures that target names across packages don't collide
-add_executable(myego_node 
-src/myego_node.cpp)
+# add_executable(${PROJECT_NAME}_node src/mybspline_opt_node.cpp)
 
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
@@ -155,8 +148,8 @@ src/myego_node.cpp)
 # add_dependencies(${PROJECT_NAME}_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 
 ## Specify libraries to link a library or executable target against
-target_link_libraries(myego_node
-  ${LIBS}
+target_link_libraries(mybspline_opt
+  ${catkin_LIBRARIES}
 )
 
 #############
@@ -206,7 +199,7 @@ target_link_libraries(myego_node
 #############
 
 ## Add gtest based cpp test target and link libraries
-# catkin_add_gtest(${PROJECT_NAME}-test test/test_myplan_manage.cpp)
+# catkin_add_gtest(${PROJECT_NAME}-test test/test_mybspline_opt.cpp)
 # if(TARGET ${PROJECT_NAME}-test)
 #   target_link_libraries(${PROJECT_NAME}-test ${PROJECT_NAME})
 # endif()

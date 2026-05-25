@@ -13,3 +13,6 @@ void mySigintHandler(int sig)
 
 signal(SIGINT, mySigintHandler);
 ```
+# EIGEN/DENSE
+## EIGEN_MAKE_ALIGNED_OPERATOR_NEW
+在定义了Eigen对象的地方使用使得内存对齐
