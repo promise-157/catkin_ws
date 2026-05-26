@@ -130,6 +130,7 @@ include_directories(
 add_library(mytraj_utils
 
     src/polynomial_traj.cpp 
+    src/planning_visualization.cpp
 )
 
 ## Add cmake target dependencies of the library

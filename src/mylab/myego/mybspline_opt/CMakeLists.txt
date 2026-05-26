@@ -11,6 +11,9 @@ find_package(catkin REQUIRED COMPONENTS
   roscpp
   rospy
   std_msgs
+  mytraj_utils
+  myplan_env
+  mypath_searching
 )
 find_package(Eigen3 REQUIRED)
 
@@ -106,8 +109,8 @@ find_package(Eigen3 REQUIRED)
 catkin_package(
  INCLUDE_DIRS include
  LIBRARIES mybspline_opt
- CATKIN_DEPENDS roscpp rospy std_msgs
- DEPENDS system_lib
+ CATKIN_DEPENDS roscpp rospy std_msgs myplan_env
+#  DEPENDS plan_env
 )
 
 ###########
@@ -125,6 +128,7 @@ include_directories(
 ## Declare a C++ library
 add_library(mybspline_opt
   src/uniform_bspline.cpp
+  src/bspline_optimizer.cpp
 )
 
 ## Add cmake target dependencies of the library

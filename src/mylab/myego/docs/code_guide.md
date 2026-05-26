@@ -15,3 +15,9 @@ h用在c或c与c++混编的情况。hpp是纯正C++情况的
 # 文件介绍
 1. polynomial是使用minisnap生成
 2. uniform_bspline是实现B样条
+## raycast
+在三维栅格（Voxel/Grid）环境中，给出一条线段的起点 start 和终点 end，这两个函数能够高效地计算出这条三维线段到底穿过了哪些所有的栅格（体素）
+## obj_predictor
+fastplanner代码
+## obj_generator.cpp和linear_obj_model.hpp
+plan_env他是生成节点的。
