@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.0.2)
-project(myplan_manage)
+project(myquadrotor_msgs)
 
 ## Compile as C++11, supported in ROS Kinetic and newer
 # add_compile_options(-std=c++11)
@@ -9,15 +9,10 @@ project(myplan_manage)
 ## is used, also find other catkin packages
 find_package(catkin REQUIRED COMPONENTS
   geometry_msgs
+  message_generation
+  nav_msgs
   roscpp
-  rospy
-  std_msgs
-  mytraj_utils
-  mybspline_opt
-  mypath_searching
-  myplan_env
 )
-find_package(Eigen3 REQUIRED) 
 
 ## System dependencies are found with CMake's conventions
 # find_package(Boost REQUIRED COMPONENTS system)
@@ -53,11 +48,32 @@ find_package(Eigen3 REQUIRED)
 ##   * add every package in MSG_DEP_SET to generate_messages(DEPENDENCIES ...)
 
 ## Generate messages in the 'msg' folder
-# add_message_files(
-#   FILES
-#   Message1.msg
-#   Message2.msg
-# )
+add_message_files(
+  FILES
+  AuxCommand.msg
+  Corrections.msg
+  Gains.msg
+  OutputData.msg
+  PositionCommand.msg
+  PPROutputData.msg
+  Serial.msg
+  SO3Command.msg
+  StatusData.msg
+  TRPYCommand.msg
+  Odometry.msg
+  PolynomialTrajectory.msg
+  OptimalTimeAllocator.msg
+  TrajectoryMatrix.msg
+  ReplanCheck.msg
+  SpatialTemporalTrajectory.msg
+  Bspline.msg
+  SwarmCommand.msg
+  Replan.msg
+  SwarmOdometry.msg
+  SwarmInfo.msg
+  Px4ctrlDebug.msg
+  TakeoffLand.msg
+)
 
 ## Generate services in the 'srv' folder
 # add_service_files(
@@ -74,10 +90,11 @@ find_package(Eigen3 REQUIRED)
 # )
 
 ## Generate added messages and services with any dependencies listed here
-# generate_messages(
-#   DEPENDENCIES
-#   geometry_msgs#   std_msgs
-# )
+generate_messages(
+    DEPENDENCIES
+    geometry_msgs
+    nav_msgs
+)
 
 ################################################
 ## Declare ROS dynamic reconfigure parameters ##
@@ -110,8 +127,8 @@ find_package(Eigen3 REQUIRED)
 ## DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
 #  INCLUDE_DIRS include
-#  LIBRARIES myplan_manage
-#  CATKIN_DEPENDS geometry_msgs roscpp rospy std_msgs
+#  LIBRARIES myquadrotor_msgs
+#  CATKIN_DEPENDS geometry_msgs message_generation nav_msgs roscpp
 #  DEPENDS system_lib
 )
 
@@ -124,15 +141,11 @@ catkin_package(
 include_directories(
  include
   ${catkin_INCLUDE_DIRS}
-  ${EIGEN3_INCLUDE_DIRS}
 )
-set(LIBS
-${catkin_LIBRARIES}
-${EIGEN3_LIBS}
-)
+
 ## Declare a C++ library
 # add_library(${PROJECT_NAME}
-#   src/${PROJECT_NAME}/myplan_manage.cpp
+#   src/${PROJECT_NAME}/myquadrotor_msgs.cpp
 # )
 
 ## Add cmake target dependencies of the library
@@ -143,10 +156,7 @@ ${EIGEN3_LIBS}
 ## Declare a C++ executable
 ## With catkin_make all packages are built within a single CMake context
 ## The recommended prefix ensures that target names across packages don't collide
-add_executable(myego_node 
-src/myego_node.cpp
-src/planner_manager.cpp
-src/ego_replan_fsm.cpp)
+# add_executable(${PROJECT_NAME}_node src/myquadrotor_msgs_node.cpp)
 
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
@@ -159,9 +169,9 @@ src/ego_replan_fsm.cpp)
 # add_dependencies(${PROJECT_NAME}_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 
 ## Specify libraries to link a library or executable target against
-target_link_libraries(myego_node
-  ${LIBS}
-)
+# target_link_libraries(${PROJECT_NAME}_node
+#   ${catkin_LIBRARIES}
+# )
 
 #############
 ## Install ##
@@ -210,7 +220,7 @@ target_link_libraries(myego_node
 #############
 
 ## Add gtest based cpp test target and link libraries
-# catkin_add_gtest(${PROJECT_NAME}-test test/test_myplan_manage.cpp)
+# catkin_add_gtest(${PROJECT_NAME}-test test/test_myquadrotor_msgs.cpp)
 # if(TARGET ${PROJECT_NAME}-test)
 #   target_link_libraries(${PROJECT_NAME}-test ${PROJECT_NAME})
 # endif()

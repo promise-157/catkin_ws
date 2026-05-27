@@ -53,6 +53,12 @@
   <build_depend>roscpp</build_depend>
   <build_depend>rospy</build_depend>
   <build_depend>std_msgs</build_depend>
+
+  <build_depend>myplan_env</build_depend>
+  <build_depend>mypath_searching</build_depend>
+  <build_depend>mybspline_opt</build_depend>
+  <build_depend>mytraj_utils</build_depend>
+
   <build_export_depend>geometry_msgs</build_export_depend>
   <build_export_depend>roscpp</build_export_depend>
   <build_export_depend>rospy</build_export_depend>
@@ -61,6 +67,11 @@
   <exec_depend>roscpp</exec_depend>
   <exec_depend>rospy</exec_depend>
   <exec_depend>std_msgs</exec_depend>
+
+    <exec_depend>myplan_env</exec_depend>
+  <exec_depend>mypath_searching</exec_depend>
+  <exec_depend>mybspline_opt</exec_depend>
+  <exec_depend>mytraj_utils</exec_depend>
 
 
   <!-- The export tag contains other, unspecified, tags -->

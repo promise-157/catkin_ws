@@ -163,7 +163,10 @@ public:
     return length;
   }
 
-  double getMeanVel() { double mean_vel = length / time_sum; }
+  double getMeanVel() {
+    double mean_vel = length / time_sum;
+    return mean_vel;
+  }
 
   double getAccCost() {
     double cost = 0.0;

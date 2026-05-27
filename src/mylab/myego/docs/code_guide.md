@@ -21,3 +21,39 @@ h用在c或c与c++混编的情况。hpp是纯正C++情况的
 fastplanner代码
 ## obj_generator.cpp和linear_obj_model.hpp
 plan_env他是生成节点的。
+## lbfgs
+拟牛顿法求解优化问题。
+## 核心算法涉及文件
+1. plan_manage
+- node节点
+- fsm状态机，使用manage去调用底层的算法实现轨迹。
+- manager管理，将底层的A* B样条优化，地图，数学求解器串联起来
+2. traj——utils
+- polynomial生成初始轨迹，一切的起点使用的地方很多，主要为管理和优化处。
+- plan_container.hpp管理轨迹，使用地方为B样条优化与规划的manager
+- plannig_visualization生成可视化轨迹，核心算法不涉及到但是我误放入了。
+- msg，字面意思
+2. bspline_opt
+- lbfgs.hpp 最优化数学工具
+- uniform，生成标准的B样条
+- optimizer，优化B样条
+3. path_searching
+A*算法
+4. plan_env
+- grid_map,记录地图信息，不起到生成地图的作用。
+- raycast，算法记录线段占据栅格。
+- predictor,使用fastplanner，预测障碍物轨迹。
+5. 
+- grid_map和raycast更新哪里有障碍物，如果有移动障碍物则预测未来障碍物。
+- fsm收到任务，manage使用traj_utils中的poly生成多项式轨迹，看是否这个轨迹经过障碍物，如果有就使用A*绕开并得到控制点。
+- 将控制点丢给bspline_opt生成初始B样条，Optimizer 根据给定参数如碰撞距离等构建最优化问题使用lbfgs求解
+- plan_container记录轨迹等待下一个周期同时可以考虑其他操作如可视化。
+## 算法 to sim
+1. traj_server 把订阅的B样条多项式方程转换成位置速度加速度发布
+2. rosmsg_tcp_bridge 集群时使用用于可靠的广播自己的轨迹。
+3. drone_detect 集群时使用，利用视觉识别周围无人机。
+4. linear_obj_model.hpp，线性运动物体运动预测，他虽然引用在了obj预测里但是实际上代码没有用到。
+5. gradient_descent_optimizer.h / cpp轻量化的数学求解器同样没用到。
+## traj_server
+1. quadrotor_msgs功能包定义仿真用指令信息。这是一个传承很久的包里面有着大量的历史遗留数据，没必要全看。这里只使用了#include "quadrotor_msgs/PositionCommand.h"
+里面有的cpp文件是用来和真机传递数据的
