@@ -160,6 +160,13 @@ target_link_libraries(myplan_env
   ${PCL_LIBRARIES}
 )
 
+add_executable(myobj_generator
+    src/myobj_generator.cpp 
+)
+target_link_libraries(myobj_generator 
+    ${catkin_LIBRARIES}
+    )
+
 #############
 ## Install ##
 #############

@@ -54,6 +54,28 @@ A*算法
 3. drone_detect 集群时使用，利用视觉识别周围无人机。
 4. linear_obj_model.hpp，线性运动物体运动预测，他虽然引用在了obj预测里但是实际上代码没有用到。
 5. gradient_descent_optimizer.h / cpp轻量化的数学求解器同样没用到。
-## traj_server
+### traj_server
 1. quadrotor_msgs功能包定义仿真用指令信息。这是一个传承很久的包里面有着大量的历史遗留数据，没必要全看。这里只使用了#include "quadrotor_msgs/PositionCommand.h"
 里面有的cpp文件是用来和真机传递数据的
+2. 输入ego生成的bspline生成控制指令cmd
+### odom_visualization
+rviz的可视化工作，mesh文件是无人机模型
+### launch介绍
+- single标签的为无地图模式
+- launch功能为rviz启动，轨迹转换器启动，rviz可视化数据节点启动。
+- xml后缀为实际上的ego算法启动
+- 综上实际上会使用到的launch文件为rviz.launch和带地图的run_in_gazebo.launch文件.而这里面还有障碍物生成和路径生成两个功能包要实现。下面进行介绍。
+### plan_env/obj_generator以及 linear_obj_model.hpp
+生成地图实际上只有rviz能显示，gazebo里还是空的
+### waypoint_generator 
+负责把rviz的鼠标标点变成可用格式，也提供了固定的路线点。
+至此仿真涉及到的文件其实已经讲的差不多了。下面看着介绍一下其他文件是干啥的吧
+## 其他文件
+- Utils/cmake utils
+编译优化基本上可以不用管
+- rviz_plugins
+优化rviz显示和功能，有机会研究研究，他实现了3D指定点，优化点云，遥控输入。如果要用launch里的rviz.launch记得把这个也挪到工程里。
+- uav_utils
+基于Eigen，四元数转换为无人机角度等点转换工作，和pose_utils（基于Armadillo）的功能似乎是一样的。
+- multi_map_server
+字面意思，好像一点都用不到

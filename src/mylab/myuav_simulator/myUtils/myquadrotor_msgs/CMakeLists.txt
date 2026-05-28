@@ -50,27 +50,27 @@ find_package(catkin REQUIRED COMPONENTS
 ## Generate messages in the 'msg' folder
 add_message_files(
   FILES
-  AuxCommand.msg
+  #AuxCommand.msg
   Corrections.msg
   Gains.msg
   OutputData.msg
   PositionCommand.msg
   PPROutputData.msg
   Serial.msg
-  SO3Command.msg
+  #SO3Command.msg
   StatusData.msg
-  TRPYCommand.msg
+  #TRPYCommand.msg
   Odometry.msg
   PolynomialTrajectory.msg
   OptimalTimeAllocator.msg
-  TrajectoryMatrix.msg
+  #TrajectoryMatrix.msg
   ReplanCheck.msg
   SpatialTemporalTrajectory.msg
   Bspline.msg
-  SwarmCommand.msg
+  #SwarmCommand.msg
   Replan.msg
-  SwarmOdometry.msg
-  SwarmInfo.msg
+  #SwarmOdometry.msg
+  #SwarmInfo.msg
   Px4ctrlDebug.msg
   TakeoffLand.msg
 )

@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.0.2)
-project(myplan_manage)
+project(mywaypoint_generator)
 
 ## Compile as C++11, supported in ROS Kinetic and newer
 # add_compile_options(-std=c++11)
@@ -8,16 +8,10 @@ project(myplan_manage)
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
 ## is used, also find other catkin packages
 find_package(catkin REQUIRED COMPONENTS
-  geometry_msgs
+  nav_msgs
   roscpp
-  rospy
-  std_msgs
-  mytraj_utils
-  mybspline_opt
-  mypath_searching
-  myplan_env
+  tf
 )
-find_package(Eigen3 REQUIRED) 
 
 ## System dependencies are found with CMake's conventions
 # find_package(Boost REQUIRED COMPONENTS system)
@@ -76,7 +70,7 @@ find_package(Eigen3 REQUIRED)
 ## Generate added messages and services with any dependencies listed here
 # generate_messages(
 #   DEPENDENCIES
-#   geometry_msgs#   std_msgs
+#   nav_msgs
 # )
 
 ################################################
@@ -110,8 +104,8 @@ find_package(Eigen3 REQUIRED)
 ## DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
 #  INCLUDE_DIRS include
-#  LIBRARIES myplan_manage
-#  CATKIN_DEPENDS geometry_msgs roscpp rospy std_msgs
+#  LIBRARIES mywaypoint_generator
+#  CATKIN_DEPENDS nav_msgs roscpp tf
 #  DEPENDS system_lib
 )
 
@@ -124,15 +118,11 @@ catkin_package(
 include_directories(
  include
   ${catkin_INCLUDE_DIRS}
-  ${EIGEN3_INCLUDE_DIRS}
 )
-set(LIBS
-${catkin_LIBRARIES}
-${EIGEN3_LIBS}
-)
+
 ## Declare a C++ library
 # add_library(${PROJECT_NAME}
-#   src/${PROJECT_NAME}/myplan_manage.cpp
+#   src/${PROJECT_NAME}/mywaypoint_generator.cpp
 # )
 
 ## Add cmake target dependencies of the library
@@ -143,14 +133,12 @@ ${EIGEN3_LIBS}
 ## Declare a C++ executable
 ## With catkin_make all packages are built within a single CMake context
 ## The recommended prefix ensures that target names across packages don't collide
-add_executable(myego_node 
-src/myego_node.cpp
-src/planner_manager.cpp
-src/ego_replan_fsm.cpp)
+# add_executable(${PROJECT_NAME}_node src/mywaypoint_generator_node.cpp)
+add_executable(mywaypoint_generator src/mywaypoint_generator.cpp)
 
-add_executable(mytraj_server src/mytraj_server.cpp)
-target_link_libraries(mytraj_server ${catkin_LIBRARIES})
-
+target_link_libraries(mywaypoint_generator
+   ${catkin_LIBRARIES}
+)
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
 ## target back to the shorter version for ease of user use
@@ -162,9 +150,9 @@ target_link_libraries(mytraj_server ${catkin_LIBRARIES})
 # add_dependencies(${PROJECT_NAME}_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 
 ## Specify libraries to link a library or executable target against
-target_link_libraries(myego_node
-  ${LIBS}
-)
+# target_link_libraries(${PROJECT_NAME}_node
+#   ${catkin_LIBRARIES}
+# )
 
 #############
 ## Install ##
@@ -213,7 +201,7 @@ target_link_libraries(myego_node
 #############
 
 ## Add gtest based cpp test target and link libraries
-# catkin_add_gtest(${PROJECT_NAME}-test test/test_myplan_manage.cpp)
+# catkin_add_gtest(${PROJECT_NAME}-test test/test_mywaypoint_generator.cpp)
 # if(TARGET ${PROJECT_NAME}-test)
 #   target_link_libraries(${PROJECT_NAME}-test ${PROJECT_NAME})
 # endif()

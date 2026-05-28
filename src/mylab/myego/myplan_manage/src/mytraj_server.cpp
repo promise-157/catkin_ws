@@ -1,8 +1,15 @@
 #include <Eigen/Dense>
 #include <mybspline_opt/uniform_bspline.h>
+#include <myquadrotor_msgs/PositionCommand.h>
 #include <mytraj_utils/Bspline.h>
 #include <ros/ros.h>
 using namespace myego;
+
+ros::Publisher pos_cmd_pub;
+
+myquadrotor_msgs::PositionCommand cmd;
+double pos_gain[3] = {0, 0, 0};
+double vel_gain[3] = {0, 0, 0};
 
 bool receive_traj_ = false;
 vector<UniformBspline> traj_;
@@ -175,7 +182,7 @@ void cmdCallback(const ros::TimerEvent &e) {
   cmd.header.stamp = time_now;
   cmd.header.frame_id = "world";
   cmd.trajectory_flag =
-      quadrotor_msgs::PositionCommand::TRAJECTORY_STATUS_READY;
+      myquadrotor_msgs::PositionCommand::TRAJECTORY_STATUS_READY;
   cmd.trajectory_id = traj_id_;
 
   cmd.position.x = pos(0);
@@ -205,8 +212,27 @@ int main(int argc, char **argv) {
       nh.subscribe("planning/bspline", 10, bsplineCallback);
 
   pos_cmd_pub =
-      nh.advertise<quadrotor_msgs::PositionCommand>("/position_cmd", 50);
+      nh.advertise<myquadrotor_msgs::PositionCommand>("/position_cmd", 50);
 
   ros::Timer cmd_timer = nh.createTimer(ros::Duration(0.01), cmdCallback);
+
+  /* control parameter */
+  cmd.kx[0] = pos_gain[0];
+  cmd.kx[1] = pos_gain[1];
+  cmd.kx[2] = pos_gain[2];
+
+  cmd.kv[0] = vel_gain[0];
+  cmd.kv[1] = vel_gain[1];
+  cmd.kv[2] = vel_gain[2];
+
+  nh.param("traj_server/time_forward", time_forward_, -1.0);
+  last_yaw_ = 0.0;
+  last_yaw_dot_ = 0.0;
+
+  ros::Duration(1.0).sleep();
+
+  ROS_WARN("[Traj server]: ready.");
+
+  ros::spin();
   return 0;
 }
