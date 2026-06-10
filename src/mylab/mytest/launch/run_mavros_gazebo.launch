@@ -13,7 +13,7 @@
 
     <arg name="est" default="ekf2"/>
     <arg name="vehicle" default="iris"/>
-    <arg name="sdf" default="$(find mavlink_sitl_gazebo)/models/iris_livox/iris.sdf"/>
+    <arg name="sdf" default="$(find mavlink_sitl_gazebo)/models/iris_depth_camera/iris_depth_camera.sdf"/>
     <arg name="world" default="$(find mavlink_sitl_gazebo)/worlds/test.world"/>
     <!-- gazebo configs -->
     <arg name="gui" default="true"/>

@@ -74,7 +74,7 @@ rviz的可视化工作，mesh文件是无人机模型
 - Utils/cmake utils
 编译优化基本上可以不用管
 - rviz_plugins
-优化rviz显示和功能，有机会研究研究，他实现了3D指定点，优化点云，遥控输入。如果要用launch里的rviz.launch记得把这个也挪到工程里。
+优化rviz显示和功能，有机会研究研究，他实现了3D指定点，优化点云，遥控输入。
 - uav_utils
 基于Eigen，四元数转换为无人机角度等点转换工作，和pose_utils（基于Armadillo）的功能似乎是一样的。
 - multi_map_server

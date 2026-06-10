@@ -29,22 +29,27 @@ roslaunch mytest run_mavros_gazebo.launch &
 PID_GAZEBO=$! # 获取上一步后台进程的 PID
 
 # 等待仿真完全加载
-sleep 40;
+sleep 35;
 
 # 1. 触发自动起飞
 echo "Triggering auto takeoff..."
 rostopic pub -1 /takeoff_land quadrotor_msgs/TakeoffLand "takeoff_land_cmd: 1" & 
-sleep 40;
+sleep 30;
 
 # 2. 修改动态参数进入 hover_mode 和 command_mode 
 echo "Switching to AUTO_HOVER and CMD_CTRL mode..."
 rosrun dynamic_reconfigure dynparam set /myctrl mode_bool True & sleep 4;
-rosrun dynamic_reconfigure dynparam set /myctrl cmd_bool True & sleep 4;
+rosrun dynamic_reconfigure dynparam set /myctrl cmd_bool True & sleep 8;
+
+roslaunch myplan_manage run_in_gazebo.launch & sleep 10;
+
+roslaunch myplan_manage rviz.launch &
 
 # ==============================================================================
 # 3. 阻塞前台，防止脚本直接结束退出
 # ==============================================================================
 echo "All nodes started successfully. Press [Ctrl+C] to stop all nodes."
+
 
 # 这里使用 wait 阻塞前台。此时按下 Ctrl+C 会被上面的 trap 捕获，从而完美触发 cleanup
 wait

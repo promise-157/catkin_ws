@@ -143,7 +143,7 @@ ${EIGEN3_LIBS}
 ## Declare a C++ executable
 ## With catkin_make all packages are built within a single CMake context
 ## The recommended prefix ensures that target names across packages don't collide
-add_executable(myego_node 
+add_executable(myego 
 src/myego_node.cpp
 src/planner_manager.cpp
 src/ego_replan_fsm.cpp)
@@ -162,7 +162,7 @@ target_link_libraries(mytraj_server ${catkin_LIBRARIES})
 # add_dependencies(${PROJECT_NAME}_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 
 ## Specify libraries to link a library or executable target against
-target_link_libraries(myego_node
+target_link_libraries(myego
   ${LIBS}
 )
 
