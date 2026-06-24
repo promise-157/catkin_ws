@@ -53,3 +53,4 @@ echo "All nodes started successfully. Press [Ctrl+C] to stop all nodes."
 
 # 这里使用 wait 阻塞前台。此时按下 Ctrl+C 会被上面的 trap 捕获，从而完美触发 cleanup
 wait
+#测试
